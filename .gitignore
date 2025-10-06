@@ -1,0 +1,11 @@
+# Ignorer toutes les clés SSH
+*.pem
+*.key
+*.pub
+id_ed25519
+id_ed25519.pub
+zidanesshkey
+zidanesshkey.pub
+
+# Ignorer fichiers .env
+.env
