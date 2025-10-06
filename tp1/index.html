@@ -1,41 +1,192 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
 
+<html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <title>TP1</title>
-  <meta name="description" content="" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <!-- Place favicon.ico in the root directory -->
-
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CV — Zidane</title>
   <style>
-    body {
-      background-color: #e9ebee;
-      font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif;
-      font-size: 16px;
-      margin: 0 auto;
-      max-width: 800px;
+    :root{
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --accent:#0b74de;
+      --muted:#667085;
+      --text:#0f1724;
+      --radius:12px;
+      --maxw:900px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,var(--bg),#eef3fb);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:32px;
+      display:flex;
+      justify-content:center;
+      font-size:15px;
+      line-height:1.45;
+    }
+    .container{
+      width:100%;
+      max-width:var(--maxw);
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:0 8px 30px rgba(15,23,36,0.08);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns: 300px 1fr;
+    }
+    header{
+      grid-column:1/-1;
+      display:flex;
+      align-items:center;
+      gap:18px;
+      padding:28px;
+      border-bottom:1px solid #eef2f7;
+    }
+    .avatar{
+      width:72px;height:72px;border-radius:12px;
+      background:linear-gradient(135deg,var(--accent),#2b9cff);
+      display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:22px;
+      flex-shrink:0;
+    }
+    .title h1{margin:0;font-size:20px;letter-spacing:-0.2px}
+    .title p{margin:4px 0 0;color:var(--muted);font-size:13px}
+    aside{
+      padding:28px;
+      border-right:1px solid #f0f4f8;
+      background:linear-gradient(180deg,#ffffff,#fbfdff);
+    }
+    section{
+      padding:28px;
+    }
+    h2{
+      margin:0 0 12px 0;font-size:14px;color:var(--accent);
+      text-transform:uppercase;letter-spacing:0.8px;
+    }
+    .info-list, .list{
+      list-style:none;padding:0;margin:0;
+    }
+    .info-list li{margin-bottom:10px;color:var(--muted);font-size:14px}
+    .chip{display:inline-block;padding:6px 10px;border-radius:999px;background:#f1f7ff;margin:6px 6px 6px 0;font-size:13px;color:#0b63b5}
+    .education-item, .xp-item{margin-bottom:16px}
+    .education-item .meta, .xp-item .meta{color:var(--muted);font-size:13px}
+    .skills-grid{display:flex;flex-wrap:wrap;gap:8px}
+    .centered{display:flex;gap:12px;align-items:center}
+    /* Responsive */
+    @media (max-width:860px){
+      .container{grid-template-columns:1fr; padding:0}
+      aside{order:2;border-right:0;border-top:1px solid #f0f4f8}
+      section{order:1}
     }
   </style>
-
-  <!-- Code à dé-commenter si besoin de fichier CSS ou JS -->
-  <!--<link rel="stylesheet" href="style.css">-->
-  <!--<script src="main.js"></script>-->
 </head>
-
 <body>
-  <nav>
-    <a href="..">🏠 Index</a> / TP1
-  </nav>
-  <h1>TP 1</h1>
-  <!-- Add your site or application content here -->
-  <p>Hello world! This is HTML5 Boilerplate.</p>
-  <img src="../galilee.png" alt="Logo Galilee" />
+  <div class="container" role="document">
+    <header>
+      <div class="avatar">Z</div>
+      <div class="title">
+        <h1>Zidane — Ingénieur Réseaux / Développeur</h1>
+        <p>• Adresse : Paris, France • Téléphone : +33 6 XX XX XX XX <br>•  Email : yaniszidane.belharrat@univ-paris13.com • GitHub : https://github.com/Sunnbro</p>
+      </div>
+    </header>
 
-  <h2><a href="experiences/index.html">Expériences</a></h2>
+
+<aside aria-label="Informations personnelles">
+  <h2>Titre</h2>
+  <p><strong>Ingénieur réseaux & développement</strong></p>
+
+  <h2>Infos perso</h2>
+  <ul class="info-list">
+    <li><strong>Nom :</strong> Zidane</li>
+    <li><strong>Âge :</strong> 24 ans</li>
+    <li><strong>Adresse :</strong> Ville, Pays</li>
+    <li><strong>Tél :</strong> +33 6 XX XX XX XX</li>
+    <li><strong>Email :</strong> email@example.com</li>
+    <li><strong>Langues :</strong> Français (natif), Anglais (professionnel)</li>
+  </ul>
+
+  <h2>Compétences</h2>
+  <div class="skills-grid">
+    <span class="chip">Réseaux</span>
+    <span class="chip">Linux</span>
+    <span class="chip">Python</span>
+    <span class="chip">Git</span>
+    <span class="chip">Docker</span>
+    <span class="chip">MATLAB</span>
+    <span class="chip">Hamming Codes</span>
+  </div>
+
+  <h2>Centre d'intérêts</h2>
+  <ul class="info-list">
+    <li>Sport (cyclisme, marche)</li>
+    <li>Jeux vidéo (League of Legends)</li>
+    <li>Lecture technique & veille IT</li>
+  </ul>
+</aside>
+
+<section aria-label="Corps du CV">
+  <article>
+    <h2>Formations</h2>
+    <div class="education-item">
+      <strong>Master — Ingénierie des Réseaux / Université Sorbonne Paris Nord</strong>
+      <div class="meta">2024 — 2025</div>
+      <p>Spécialisation en réseaux et systèmes, cours majeurs : protocoles, sécurité, architectures distribuées.</p>
+    </div>
+
+    <div class="education-item">
+      <strong>Master — Ingénierie des Logiciels (USTHB)</strong>
+      <div class="meta">2022</div>
+      <p>Cours : algorithmique, architecture logicielle, bases de données, qualité logicielle.</p>
+    </div>
+  </article>
+
+  <article style="margin-top:22px">
+    <h2>Expériences</h2>
+    <div class="xp-item">
+      <strong>Stagiaire / DevOps — Entreprise XYZ</strong>
+      <div class="meta">Juin 2024 — Août 2024</div>
+      <p>Maintien d'infrastructures cloud, scripts d'automatisation, aide à la mise en place de pipelines CI/CD.</p>
+    </div>
+
+    <div class="xp-item">
+      <strong>Assistant Réseau — Projet Universitaire</strong>
+      <div class="meta">2023 — 2024</div>
+      <p>Conception et simulation d'architectures réseau, exercices pratiques sur topologies et routage.</p>
+    </div>
+  </article>
+
+  <article style="margin-top:22px">
+    <h2>Compétences détaillées</h2>
+    <ul class="list">
+      <li><strong>Réseaux :</strong> TCP/IP, routage, VLAN, Wireshark, configuration d'équipements.</li>
+      <li><strong>Dev & Scripting :</strong> Python, Bash, automatisation, Git (branches, merge, rebase).</li>
+      <li><strong>Systèmes :</strong> Linux (administration), Docker, virtualisation.</li>
+      <li><strong>Analyse & Signal :</strong> MATLAB, traitement du signal (ex: quantification, échantillonnage).</li>
+    </ul>
+  </article>
+
+  <article style="margin-top:22px">
+    <h2>Projets & réalisations</h2>
+    <ul class="list">
+      <li><strong>TP Hamming Coding :</strong> Implémentation [8,4,4] en Python/Numpy.</li>
+      <li><strong>Automatisation :</strong> Scripts pour déploiement et tests d'intégration.</li>
+      <li><strong>Portfolio GitHub :</strong> Références de scripts et mini-projets (lien sur GitHub).</li>
+    </ul>
+  </article>
+
+  <footer style="margin-top:28px;color:var(--muted);font-size:13px">
+    <div class="centered">
+      <div>Disponibilité : immédiate</div>
+      <div style="margin-left:12px">Références sur demande</div>
+    </div>
+  </footer>
+</section>
+
+
+  </div>
 </body>
-
 </html>
