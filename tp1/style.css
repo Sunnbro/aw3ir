@@ -1,0 +1,137 @@
+:root{
+  --bg:#f6f8fb;
+  --card:#ffffff;
+  --accent:#0b74de;
+  --muted:#667085;
+  --text:#0f1724;
+  --radius:12px;
+  --maxw:950px;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  background:linear-gradient(180deg,var(--bg),#eef3fb);
+  color:var(--text);
+  padding:32px;
+  display:flex;
+  justify-content:center;
+  font-size:15px;
+  line-height:1.5;
+}
+
+.container{
+  width:100%;
+  max-width:var(--maxw);
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:0 8px 30px rgba(15,23,36,0.08);
+  overflow:hidden;
+  display:grid;
+  grid-template-columns: 300px 1fr;
+}
+
+header{
+  grid-column:1/-1;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  padding:28px;
+  border-bottom:1px solid #eef2f7;
+}
+
+.avatar{
+  width:72px;height:72px;border-radius:12px;
+  background:linear-gradient(135deg,var(--accent),#2b9cff);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-weight:700;
+  font-size:22px;
+  flex-shrink:0;
+}
+
+.title h1{
+  margin:0;
+  font-size:22px;
+}
+
+.title p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+
+aside{
+  padding:28px;
+  border-right:1px solid #f0f4f8;
+  background:linear-gradient(180deg,#ffffff,#fbfdff);
+}
+
+section{
+  padding:28px;
+}
+
+h2{
+  margin:0 0 12px 0;
+  font-size:14px;
+  color:var(--accent);
+  text-transform:uppercase;
+  letter-spacing:0.8px;
+}
+
+.info-list, .list{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+.info-list li{
+  margin-bottom:8px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.chip{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#f1f7ff;
+  margin:4px 4px 4px 0;
+  font-size:13px;
+  color:#0b63b5;
+}
+
+.education-item, .xp-item{
+  margin-bottom:18px;
+}
+
+.education-item .meta, .xp-item .meta{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.skills-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+
+/* Responsive */
+@media (max-width:860px){
+  .container{
+    grid-template-columns:1fr;
+    padding:0;
+  }
+  aside{
+    order:2;
+    border-right:0;
+    border-top:1px solid #f0f4f8;
+  }
+  section{
+    order:1;
+  }
+}
