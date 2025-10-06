@@ -119,7 +119,15 @@ h2{
   flex-wrap:wrap;
   gap:6px;
 }
+.education-item a, .xp-item a {
+  color: #000000; /* noir */
+  text-decoration: none; /* enlève le soulignement si tu veux */
+}
 
+.education-item a:hover {
+  color: #0b74de; /* couleur au survol (facultatif) */
+  text-decoration: underline; /* facultatif, pour le survol */
+}
 /* Responsive */
 @media (max-width:860px){
   .container{
