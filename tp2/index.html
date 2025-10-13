@@ -1,40 +1,65 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <title>TP2</title>
-  <meta name="description" content="" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <!-- Place favicon.ico in the root directory -->
-
-  <style>
-    body {
-      background-color: #e9ebee;
-      font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco",
-        "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif;
-      font-size: 16px;
-      margin: 0 auto;
-      max-width: 800px;
-    }
-  </style>
-
-  <!-- Code à dé-commenter si besoin de fichier CSS ou JS -->
-  <!--<link rel="stylesheet" href="style.css">-->
-  <!--<script src="js/main.js"></script>-->
+    <meta charset="UTF-8">
+    <title>Formulaire TP Web</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <nav>
-    <a href="..">🏠 Index</a> / TP2
-  </nav>
-  <h1>tp2</h1>
-  <!-- Add your site or application content here -->
-  <p>Hello world! This is HTML5 Boilerplate.</p>
-  <img src="../galilee.png" alt="Logo Galilee" />
-</body>
+    <h1 style="text-align: center;">Formulaire d'inscription</h1>
 
+    <form action="action.html" method="get">
+        <p>
+            <label for="name">Nom</label>
+            <input type="text" id="name" name="name" minlength="2" maxlength="20" required>
+            <span class="icon-ok">✔</span>
+        </p>
+
+        <p>
+            <label for="firstname">Prénom</label>
+            <input type="text" id="firstname" name="firstname" minlength="2" maxlength="20" required>
+            <span class="icon-ok">✔</span>
+        </p>
+
+        <p>
+            <label for="birthday">Date de naissance</label>
+            <input type="date" id="birthday" name="birthday" required>
+            <span class="icon-ok">✔</span>
+        </p>
+
+        <p>
+            <label for="address">Adresse postale</label>
+            <input type="text" id="address" name="address" minlength="5" maxlength="50" required>
+            <span class="icon-ok">✔</span>
+        </p>
+
+        <p>
+            <label for="email">Adresse mail</label>
+            <input type="email" id="email" name="email" minlength="5" maxlength="30" required>
+            <span class="icon-ok">✔</span>
+        </p>
+
+        <p>
+            <button type="submit" class="btn-primary">Envoyer</button>
+        </p>
+    </form>
+
+    <script>
+        // Sélectionne tous les inputs et leur span associé
+        const inputs = document.querySelectorAll('input');
+
+        inputs.forEach(input => {
+            const check = input.nextElementSibling; // span ✔ juste après l'input
+
+            // Vérifie la validité à chaque saisie
+            input.addEventListener('input', () => {
+                if (input.checkValidity()) {
+                    check.style.display = 'inline'; // Affiche ✔ si valide
+                } else {
+                    check.style.display = 'none';   // Cache ✔ si invalide
+                }
+            });
+        });
+    </script>
+</body>
 </html>

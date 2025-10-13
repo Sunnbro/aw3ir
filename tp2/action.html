@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Résultat du formulaire</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="index.html" class="btn-primary">⬅️ Retour au formulaire</a>
+
+    <h1>TP #2 - résultat du formulaire</h1>
+
+    <div>
+        <p>Bonjour <span id="name"></span> <span id="firstname"></span>,</p>
+        <p>
+            Vous êtes né le <span id="birthday"></span>
+            et habité(e)
+            <a href="" id="address" target="_blank"></a>.
+        </p>
+        <p>
+            Mail :
+            <a href="" id="email"></a>
+        </p>
+    </div>
+
+    <script>
+        window.onload = () => {
+            const params = new URLSearchParams(window.location.search);
+
+            // Récupérer et afficher chaque valeur
+            document.getElementById('name').textContent = params.get('name') || '';
+            document.getElementById('firstname').textContent = params.get('firstname') || '';
+            document.getElementById('birthday').textContent = params.get('birthday') || '';
+
+            const addressEl = document.getElementById('address');
+            const addressValue = params.get('address') || '';
+            addressEl.textContent = addressValue;
+            if(addressValue) {
+                addressEl.href = `https://www.google.com/maps/search/?api=1&query=${addressValue}`;
+            }
+
+            const emailEl = document.getElementById('email');
+            const emailValue = params.get('email') || '';
+            emailEl.textContent = emailValue;
+            if(emailValue) {
+                emailEl.href = `mailto:${emailValue}`;
+            }
+        };
+    </script>
+</body>
+</html>
