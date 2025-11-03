@@ -96,12 +96,17 @@ window.onload = function () {
 
    if (!valid) {
   // Ton modal d'erreur reste comme avant...
+    document.querySelector("#myModal .modal-body").innerText = message;
+  var myModal = new bootstrap.Modal(document.getElementById("myModal"));
+  myModal.show();
+
 } else {
   const prenomValue = prenom.value.trim();
   const dateNaissanceValue = birthday.value;
   const adresseValue = adresse.value.trim();
 
-  document.querySelector("#welcomeText").innerText = `Bienvenue ${prenomValue}. Vous êtes né(e) le ${dateNaissanceValue} et vous habitez :`;
+  document.querySelector("#successModal .modal-title").innerText = `Bienvenue ${prenomValue}`;
+  document.querySelector("#welcomeText").innerText = `Vous êtes né(e) le ${dateNaissanceValue} et vous habitez :`;
 
   // Met à jour le lien Google Maps
   const googleMapsLink = `https://maps.google.com/maps?q=${encodeURIComponent(adresseValue)}`;
