@@ -10,6 +10,9 @@
     <!-- CSS boostrap -->
     <link rel="stylesheet" href="css/bootstrap.css" />
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
     <!-- librairie Javascript de boostrap pour pouvoir utiliser les composants interactifs (modal https://getbootstrap.com/docs/5.1/components/modal/ , collapse...) -->
     <script src="js/bootstrap.bundle.js"></script>
     <script src="js/form-validation.js"></script>
@@ -109,7 +112,7 @@
   aria-labelledby="successModalLabel"
   aria-hidden="true"
 >
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg"> <!-- modal large for map -->
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="successModalLabel">Succès</h5>
@@ -121,7 +124,9 @@
         ></button>
       </div>
       <div class="modal-body">
-        Formulaire valide !
+        <p id="welcomeText"></p>
+        <div id="map" style="height: 400px;"></div>
+        <p><a id="mapLink" href="" target="_blank">Voir sur Google Maps</a></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
@@ -131,6 +136,7 @@
     </div>
   </div>
 </div>
+
 
 </body>
 

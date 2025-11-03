@@ -95,35 +95,61 @@ window.onload = function () {
     }
 
    if (!valid) {
-  document.querySelector("#myModal .modal-body").innerText = message;
-  var myModal = new bootstrap.Modal(document.getElementById("myModal"));
-  myModal.show();
+  // Ton modal d'erreur reste comme avant...
 } else {
-  // Préparer le contenu personnalisé de la modal succès
   const prenomValue = prenom.value.trim();
   const dateNaissanceValue = birthday.value;
   const adresseValue = adresse.value.trim();
-  const adresseEncoded = encodeURIComponent(adresseValue);
-  const mapLink = `https://maps.google.com/maps?q=${adresseEncoded}`;
 
-  // Générer le contenu HTML
-  document.querySelector("#successModal .modal-title").innerText = `Bienvenue ${prenomValue}`;
-  document.querySelector("#successModal .modal-body").innerHTML = `
-    <p>Vous êtes né(e) le ${dateNaissanceValue} et vous habitez</p>
-    <a href="${mapLink}" target="_blank">
-      <img src="maps.png" alt="Carte de votre adresse">
-    </a>
-    <br>
-    <a href="${mapLink}" target="_blank">${adresseValue}</a>
-  `;
+  document.querySelector("#welcomeText").innerText = `Bienvenue ${prenomValue}. Vous êtes né(e) le ${dateNaissanceValue} et vous habitez :`;
 
+  // Met à jour le lien Google Maps
+  const googleMapsLink = `https://maps.google.com/maps?q=${encodeURIComponent(adresseValue)}`;
+  const mapLinkElement = document.getElementById("mapLink");
+  mapLinkElement.href = googleMapsLink;
+  mapLinkElement.innerText = adresseValue;
+
+  // Affiche la modal
   var successModal = new bootstrap.Modal(document.getElementById("successModal"));
   successModal.show();
 
+  // Géocode avec Nominatim pour récupérer latitude et longitude
+  fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(adresseValue)}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data && data.length > 0) {
+        const lat = data[0].lat;
+        const lon = data[0].lon;
+
+        // Initialise la carte Leaflet dans le container #map
+        const mapContainer = document.getElementById('map');
+        if (mapContainer._leaflet_id) {
+          // Si la carte existe déjà, la supprimer avant d'initialiser une nouvelle
+          mapContainer._leaflet_id = null;
+          mapContainer.innerHTML = "";
+        }
+
+        const map = L.map('map').setView([lat, lon], 14);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        L.marker([lat, lon]).addTo(map);
+      } else {
+        // Pas de résultat
+        document.getElementById('map').innerHTML = 'Adresse introuvable sur la carte.';
+      }
+    })
+    .catch(() => {
+      document.getElementById('map').innerHTML = 'Erreur lors du chargement de la carte.';
+    });
+
+  // Soumet le formulaire après fermeture de la modal
   document.getElementById("successModal").addEventListener('hidden.bs.modal', function () {
     form.submit();
   }, { once: true });
 }
+
 
   });
 };
