@@ -1,24 +1,41 @@
 window.onload = function () {
   console.log("DOM ready!");
 
-  // Sélection du formulaire
   const form = document.querySelector("form");
   const gpsBtn = document.getElementById("btnGPS");
+  const resetBtn = document.getElementById("resetContacts");
 
-  // Quand on clique sur le bouton GPS → appel geolocalisation
+  // Affiche la liste des contacts au chargement
+  displayContactList();
+
+  // -----------------------------
+  // Bouton GPS
+  // -----------------------------
   gpsBtn.addEventListener("click", function () {
     console.log("Bouton GPS cliqué");
-    getLocation(); // Appelle la fonction dans gps.js
+    getLocation(); // Appelle la fonction définie dans gps.js
   });
 
+  // -----------------------------
+  // Bouton Reset
+  // -----------------------------
+  resetBtn?.addEventListener("click", function () {
+    contactStore.reset(); // vide le localStorage
+    displayContactList(); // rafraîchit le tableau
+  });
+
+  // -----------------------------
   // Validation email
+  // -----------------------------
   function validateEmail(email) {
     const re =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
   }
 
-  // Ajout écouteur sur la soumission du formulaire
+  // -----------------------------
+  // Soumission du formulaire
+  // -----------------------------
   form.addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -31,7 +48,7 @@ window.onload = function () {
     let valid = true;
     let message = "";
 
-    // Vérification des champs vides (prioritaire)
+    // Vérification des champs vides
     if (
       nom.value.trim() === "" ||
       prenom.value.trim() === "" ||
@@ -40,7 +57,7 @@ window.onload = function () {
       birthday.value.trim() === ""
     ) {
       valid = false;
-      message = "Tous les champs sont obligatoires";
+      message = "Tous les champs sont obligatoires\n";
 
       if (nom.value.trim() === "") nom.classList.add("is-invalid");
       if (prenom.value.trim() === "") prenom.classList.add("is-invalid");
@@ -54,64 +71,71 @@ window.onload = function () {
       email.classList.remove("is-invalid");
       birthday.classList.remove("is-invalid");
 
-      // Validation des longueurs minimum 5 caractères
+      // Longueur minimum 5 caractères
       if (nom.value.trim().length < 5) {
         valid = false;
         message += "Nom : 5 caractères minimum\n";
         nom.classList.add("is-invalid");
-      } else {
-        nom.classList.remove("is-invalid");
       }
-
       if (prenom.value.trim().length < 5) {
         valid = false;
         message += "Prénom : 5 caractères minimum\n";
         prenom.classList.add("is-invalid");
-      } else {
-        prenom.classList.remove("is-invalid");
       }
-
       if (adresse.value.trim().length < 5) {
         valid = false;
         message += "Adresse : 5 caractères minimum\n";
         adresse.classList.add("is-invalid");
-      } else {
-        adresse.classList.remove("is-invalid");
       }
 
-      // Validation email format
+      // Email
       if (!validateEmail(email.value)) {
         valid = false;
-        message += "Adresse : format mail invalide\n";
+        message += "Adresse mail invalide\n";
         email.classList.add("is-invalid");
-      } else {
-        email.classList.remove("is-invalid");
       }
 
-      // Validation date de naissance
+      // Date de naissance
       let birthdayDate = new Date(birthday.value);
-      let birthdayTimestamp = birthdayDate.getTime();
-      let nowTimestamp = Date.now();
-
-      if (birthdayTimestamp > nowTimestamp) {
+      if (birthdayDate.getTime() > Date.now()) {
         valid = false;
         message += "Date de naissance invalide\n";
         birthday.classList.add("is-invalid");
-      } else {
-        birthday.classList.remove("is-invalid");
       }
     }
 
+    // -----------------------------
+    // Affichage modal erreur
+    // -----------------------------
     if (!valid) {
-      // Ton modal d'erreur reste comme avant...
       document.querySelector("#myModal .modal-body").innerText = message;
-      var myModal = new bootstrap.Modal(document.getElementById("myModal"));
+      const myModal = new bootstrap.Modal(document.getElementById("myModal"));
       myModal.show();
     } else {
+      // -----------------------------
+      // FORMULAIRE VALIDE → ajout contact
+      // -----------------------------
+      const nomValue = nom.value.trim();
       const prenomValue = prenom.value.trim();
       const dateNaissanceValue = birthday.value;
       const adresseValue = adresse.value.trim();
+      const emailValue = email.value.trim();
 
+      // Ajouter dans le localStorage
+      contactStore.add(
+        nomValue,
+        prenomValue,
+        dateNaissanceValue,
+        adresseValue,
+        emailValue
+      );
+
+      // Mettre à jour le tableau
+      displayContactList();
+
+      // -----------------------------
+      // Modal succès et carte
+      // -----------------------------
       document.querySelector(
         "#successModal .modal-title"
       ).innerText = `Bienvenue ${prenomValue}`;
@@ -119,7 +143,6 @@ window.onload = function () {
         "#welcomeText"
       ).innerText = `Vous êtes né(e) le ${dateNaissanceValue} et vous habitez :`;
 
-      // Met à jour le lien Google Maps
       const googleMapsLink = `https://maps.google.com/maps?q=${encodeURIComponent(
         adresseValue
       )}`;
@@ -127,13 +150,12 @@ window.onload = function () {
       mapLinkElement.href = googleMapsLink;
       mapLinkElement.innerText = adresseValue;
 
-      // Affiche la modal
-      var successModal = new bootstrap.Modal(
+      const successModal = new bootstrap.Modal(
         document.getElementById("successModal")
       );
       successModal.show();
 
-      // Géocode avec Nominatim pour récupérer latitude et longitude
+      // Géocode avec Nominatim
       fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
           adresseValue
@@ -141,17 +163,14 @@ window.onload = function () {
       )
         .then((response) => response.json())
         .then((data) => {
+          const mapContainer = document.getElementById("map");
+          if (mapContainer._leaflet_id) {
+            mapContainer._leaflet_id = null;
+            mapContainer.innerHTML = "";
+          }
           if (data && data.length > 0) {
             const lat = data[0].lat;
             const lon = data[0].lon;
-
-            // Initialise la carte Leaflet dans le container #map
-            const mapContainer = document.getElementById("map");
-            if (mapContainer._leaflet_id) {
-              // Si la carte existe déjà, la supprimer avant d'initialiser une nouvelle
-              mapContainer._leaflet_id = null;
-              mapContainer.innerHTML = "";
-            }
 
             const map = L.map("map").setView([lat, lon], 14);
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -160,9 +179,7 @@ window.onload = function () {
 
             L.marker([lat, lon]).addTo(map);
           } else {
-            // Pas de résultat
-            document.getElementById("map").innerHTML =
-              "Adresse introuvable sur la carte.";
+            mapContainer.innerHTML = "Adresse introuvable sur la carte.";
           }
         })
         .catch(() => {
@@ -170,7 +187,7 @@ window.onload = function () {
             "Erreur lors du chargement de la carte.";
         });
 
-      // Soumet le formulaire après fermeture de la modal
+      // Soumettre le formulaire après fermeture de la modal
       document.getElementById("successModal").addEventListener(
         "hidden.bs.modal",
         function () {
@@ -189,4 +206,24 @@ function calcNbChar(id) {
     .querySelector("[data-count]");
 
   countElement.textContent = input.value.length + " car.";
+}
+
+function displayContactList() {
+  const contactListString = localStorage.getItem("contactList");
+  const contactList = contactListString ? JSON.parse(contactListString) : [];
+
+  const tbody = document.querySelector("table tbody");
+  tbody.innerHTML = ""; // vide le tableau avant de remplir
+
+  for (const contact of contactList) {
+    tbody.innerHTML += `<tr>
+      <td>${contact.name}</td>
+      <td>${contact.firstname}</td>
+      <td>${contact.date}</td>
+      <td><a href="https://maps.google.com/maps?q=${encodeURIComponent(
+        contact.adress
+      )}" target="_blank">${contact.adress}</a></td>
+      <td><a href="mailto:${contact.mail}">${contact.mail}</a></td>
+    </tr>`;
+  }
 }
