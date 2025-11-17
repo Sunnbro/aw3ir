@@ -1,39 +1,74 @@
-<!doctype html>
-<html>
-
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>TP5</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP5 - Weather App</title>
 
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <!-- Place favicon.ico in the root directory -->
-
-    <style>
-        body {
-            background-color: #e9ebee;
-            font-family: system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif;
-            font-size: 16px;
-            margin: 0 auto;
-            max-width: 800px;
-        }
-    </style>
-
-    <!-- Code à dé-commenter si besoin de fichier CSS ou JS -->
-    <!--<link rel="stylesheet" href="style.css">-->
-    <!--<script src="main.js"></script>-->
+    <!-- CSS Bootstrap -->
+    <link rel="stylesheet" href="css/bootstrap.css">
 </head>
-
 <body>
-    <nav>
-        <a href="..">🏠 Index</a> / TP5
-    </nav>
-    <h1>TP5</h1>
-    <!-- Add your site or application content here -->
-    <p>Hello world! This is HTML5 Boilerplate.</p>
-    <img src="../galilee.png" alt="Logo Galilee" />
-</body>
+    <div id="weatherApp" class="container mt-4">
+        <!-- formulaire de saisie de ville -->
+    <form v-on:submit="addCity" class="mb-3">
+        <div class="input-group">
+            <input type="search" class="form-control" v-model="formCityName" placeholder="Search for..."
+                aria-label="Search for..." autofocus required />
+            <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit">Go!</button>
+            </span>
+        </div>
+    
+        <!-- affichage du nombre de caractères saisis -->
+        <small class="text-muted">{{ formCityName.length }} car.</small>
+    
+        <!-- affichage du message d'erreur si existant -->
+        <div class="alert alert-danger mt-2" role="alert" v-if="messageForm != ''">
+            {{ messageForm }}
+        </div>
+    </form>
+    <!-- Listing des villes, boucle sur l'array : cityList -->
+    <h4>Liste des villes ({{ cityList.length }})</h4>
+    <ul class="list-group mb-3">
+        <li v-for="city in cityList" :key="city.name"
+            class="list-group-item d-flex justify-content-between align-items-center">
+            <span v-on:click="meteo(city)" style="cursor: pointer;">
+                {{ city.name }}
+            </span>
+            <button v-on:click="remove(city)" class="btn btn-secondary btn-sm" title="Supprimer de la liste">
+                &times;
+            </button>
+        </li>
+    </ul>
 
+    <!-- Message si la liste est vide -->
+    <div class="alert alert-primary" role="alert" v-if="cityList.length == 0">
+        Aucune ville saisie !
+    </div>
+
+
+        <ul class="list-group">
+            <li v-for="city in cityList" :key="city.name" class="list-group-item d-flex justify-content-between align-items-center">
+                {{ city.name }}
+                <button @click="remove(city)" class="btn btn-danger btn-sm">Supprimer</button>
+            </li>
+        </ul>
+
+        <div v-if="cityWeather" class="mt-4">
+            <h3>Météo pour {{ cityWeather.name }}</h3>
+            <p>Température : {{ cityWeather.main.temp }} °C</p>
+            <p>Heure : {{ cityWheaterDate }}</p>
+            <p>Lever du soleil : {{ cityWheaterSunrise }}</p>
+            <p>Coucher du soleil : {{ cityWheaterSunset }}</p>
+        </div>
+    </div>
+
+    <!-- JS Libraries -->
+    <script src="js/libs/vue.js"></script>
+    <script src="js/libs/bootstrap.bundle.js"></script>
+
+    <!-- Votre JS -->
+    <script src="js/main.js"></script>
+</body>
 </html>
