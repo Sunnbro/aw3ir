@@ -49,10 +49,44 @@ window.onload = function () {
         );
       },
       remove: function (_city) {
-        // A compléter: supprimer la ville de cityList
+        // on utilise 'filter' pour retourner une liste avec tous les items ayant un nom différent de _city.name
+        this.cityList = this.cityList.filter(
+          (item) => item.name !== _city.name
+        );
       },
       meteo: function (_city) {
-        // A compléter: récupérer météo via API OpenWeatherMap
+        this.cityWeatherLoading = true; // indicateur de chargement
+
+        // Remplace 'VOTRE_APIKEY' par ta clé API OpenWeatherMap
+        const apiKey = "02816333a1a73457e18eba7f12f2c35d";
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${_city.name}&units=metric&lang=fr&apikey=${apiKey}`;
+
+        fetch(url)
+          .then((response) => response.json())
+          .then((json) => {
+            this.cityWeatherLoading = false;
+
+            if (json.cod == 200) {
+              // réponse OK → on stocke les données dans cityWeather
+              this.cityWeather = json;
+              this.message = null;
+            } else {
+              // ville non trouvée
+              this.cityWeather = null;
+              this.message =
+                "Météo introuvable pour " +
+                _city.name +
+                " (" +
+                json.message +
+                ")";
+            }
+          })
+          .catch((error) => {
+            this.cityWeatherLoading = false;
+            this.cityWeather = null;
+            this.message =
+              "Erreur lors de la récupération de la météo : " + error;
+          });
       },
     },
     computed: {

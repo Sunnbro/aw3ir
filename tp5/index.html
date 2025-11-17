@@ -7,61 +7,93 @@
 
     <!-- CSS Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.css">
+
+    <!-- Weather Icons (optionnel, si tu veux les icônes météo) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css">
 </head>
 <body>
     <div id="weatherApp" class="container mt-4">
-        <!-- formulaire de saisie de ville -->
-    <form v-on:submit="addCity" class="mb-3">
-        <div class="input-group">
-            <input type="search" class="form-control" v-model="formCityName" placeholder="Search for..."
-                aria-label="Search for..." autofocus required />
-            <span class="input-group-btn">
-                <button class="btn btn-primary" type="submit">Go!</button>
-            </span>
-        </div>
-    
-        <!-- affichage du nombre de caractères saisis -->
-        <small class="text-muted">{{ formCityName.length }} car.</small>
-    
-        <!-- affichage du message d'erreur si existant -->
-        <div class="alert alert-danger mt-2" role="alert" v-if="messageForm != ''">
-            {{ messageForm }}
-        </div>
-    </form>
-    <!-- Listing des villes, boucle sur l'array : cityList -->
-    <h4>Liste des villes ({{ cityList.length }})</h4>
-    <ul class="list-group mb-3">
-        <li v-for="city in cityList" :key="city.name"
-            class="list-group-item d-flex justify-content-between align-items-center">
-            <span v-on:click="meteo(city)" style="cursor: pointer;">
-                {{ city.name }}
-            </span>
-            <button v-on:click="remove(city)" class="btn btn-secondary btn-sm" title="Supprimer de la liste">
-                &times;
-            </button>
-        </li>
-    </ul>
 
-    <!-- Message si la liste est vide -->
-    <div class="alert alert-primary" role="alert" v-if="cityList.length == 0">
-        Aucune ville saisie !
-    </div>
+        <!-- Formulaire de saisie de ville -->
+        <form v-on:submit="addCity" class="mb-3">
+            <div class="input-group">
+                <input type="search" class="form-control" v-model="formCityName" placeholder="Search for..."
+                    aria-label="Search for..." autofocus required />
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">Go!</button>
+                </span>
+            </div>
+            <small class="text-muted">{{ formCityName.length }} car.</small>
+            <div class="alert alert-danger mt-2" role="alert" v-if="messageForm != ''">
+                {{ messageForm }}
+            </div>
+        </form>
 
-
-        <ul class="list-group">
+        <!-- Listing des villes -->
+        <h4>Liste des villes ({{ cityList.length }})</h4>
+        <ul class="list-group mb-3">
             <li v-for="city in cityList" :key="city.name" class="list-group-item d-flex justify-content-between align-items-center">
-                {{ city.name }}
-                <button @click="remove(city)" class="btn btn-danger btn-sm">Supprimer</button>
+                <span v-on:click="meteo(city)" style="cursor: pointer;">
+                    {{ city.name }}
+                </span>
+                <button v-on:click.stop="remove(city)" class="btn btn-secondary btn-sm" title="Supprimer de la liste">
+                    &times;
+                </button>
             </li>
         </ul>
 
-        <div v-if="cityWeather" class="mt-4">
-            <h3>Météo pour {{ cityWeather.name }}</h3>
-            <p>Température : {{ cityWeather.main.temp }} °C</p>
-            <p>Heure : {{ cityWheaterDate }}</p>
-            <p>Lever du soleil : {{ cityWheaterSunrise }}</p>
-            <p>Coucher du soleil : {{ cityWheaterSunset }}</p>
+        <div class="alert alert-primary" role="alert" v-if="cityList.length == 0">
+            Aucune ville saisie !
         </div>
+
+        <!-- Affichage météo -->
+        <div class="mt-4">
+            <!-- Message de chargement -->
+            <div v-if="cityWeatherLoading" class="alert alert-info">
+                Chargement de la météo...
+            </div>
+
+            <!-- Carte météo -->
+            <div v-if="cityWeather" class="card" style="width: 18rem;">
+                <div class="card-header">
+                    {{ cityWeather.name }} @{{ cityWheaterDate }}
+                </div>
+
+                <!-- Carte OpenStreetMap -->
+                <iframe class="card-img-top" alt="Carte OpenStreetMap" width="100%" height="200" frameborder="0" scrolling="no"
+                    :src="'https://www.openstreetmap.org/export/embed.html?bbox=' + openStreetMapArea + '&layer=mapnik&marker=' + cityWeather.coord.lat + '%2C' + cityWeather.coord.lon">
+                </iframe>
+
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i :class="'wi wi-owm-day-' + cityWeather.weather[0].id"></i>
+                        {{ cityWeather.main.temp }}<i class="wi wi-celsius"></i>
+                    </h5>
+                    <p class="card-text">{{ cityWeather.weather[0].description }}</p>
+                </div>
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <i class="wi wi-cloud"></i> Nuage: {{ cityWeather.clouds.all }}%
+                    </li>
+                    <li class="list-group-item">
+                        <i class="wi wi-humidity"></i> Humidité: {{ cityWeather.main.humidity }}%
+                    </li>
+                    <li class="list-group-item">
+                        <i class="wi wi-windy"></i> Vent: {{ cityWeather.wind.speed }} km/h
+                    </li>
+                    <li class="list-group-item">
+                        <i class="wi wi-sunrise"></i>
+                        Levé du soleil: {{ cityWheaterSunrise }}
+                    </li>
+                    <li class="list-group-item">
+                        <i class="wi wi-sunset"></i>
+                        Couché du soleil: {{ cityWheaterSunset }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+
     </div>
 
     <!-- JS Libraries -->

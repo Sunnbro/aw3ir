@@ -8,4 +8,4 @@ zidanesshkey
 zidanesshkey.pub
 
 # Ignorer fichiers .env
-.env
+keys.env
