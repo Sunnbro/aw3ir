@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-meteo',
   standalone: true,
   templateUrl: './meteo.html',
-  styleUrl: './meteo.css',
+  styleUrl: './meteo.css'
 })
-export class MeteoComponent {
-}
+export class MeteoComponent {}

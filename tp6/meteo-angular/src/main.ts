@@ -1,7 +1,10 @@
-import { platformBrowser } from '@angular/platform-browser';
-import { AppModule } from './app/app-module';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { App } from './app/app';
+import { importProvidersFrom } from '@angular/core';
+import { RouterModule } from '@angular/router'; // si tu utilises le router
 
-platformBrowser().bootstrapModule(AppModule, {
-  
-})
-  .catch(err => console.error(err));
+bootstrapApplication(App, {
+  providers: [
+    importProvidersFrom(RouterModule) // facultatif si tu utilises <router-outlet>
+  ]
+}).catch(err => console.error(err));
