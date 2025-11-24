@@ -1,12 +1,12 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MeteoComponent } from './meteo/meteo';
 import { RouterOutlet } from '@angular/router';
+import { MeteoComponent } from './meteo/meteo';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [MeteoComponent, FormsModule, ReactiveFormsModule],
+  imports: [RouterOutlet, MeteoComponent, FormsModule, ReactiveFormsModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
